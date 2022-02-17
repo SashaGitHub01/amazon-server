@@ -31,8 +31,11 @@ class UserCtrl {
          await user.save()
 
          const token = jwt.sign({ user: user.id }, process.env.SECRET_KEY)
-         res.cookie('myToken', token, { maxAge: 999999999999999 })
-
+         res.cookie('myToken', token, {
+            maxAge: 999999999999999, secure: true,
+            sameSite: 'none',
+            httpOnly: false,
+         })
          return res.json({
             data: user
          })
@@ -45,7 +48,11 @@ class UserCtrl {
       try {
          if (req.user) {
             const token = jwt.sign({ user: req.user.id }, process.env.SECRET_KEY)
-            res.cookie('myToken', token, { maxAge: 999999999999999 })
+            res.cookie('myToken', token, {
+               maxAge: 999999999999999, secure: true,
+               sameSite: 'none',
+               httpOnly: false,
+            })
          }
 
          return res.json({
