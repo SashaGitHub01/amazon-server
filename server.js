@@ -15,13 +15,11 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({
-   origin: 'http://localhost:3000',
+   origin: ['http://localhost:3000', process.env.HOST],
    credentials: true
 }));
 app.use(cookieParser())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json({
    verify: function (req, res, buf) {
       const url = req.url;
