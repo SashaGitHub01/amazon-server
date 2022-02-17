@@ -10,6 +10,8 @@ import cors from 'cors'
 import { router } from './routes/index.js'
 import { errorCatcher } from './middlewares/errorCatcher.js';
 import bodyParser from 'body-parser'
+import path from 'path';
+const __dirname = path.resolve();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -30,6 +32,14 @@ app.use(bodyParser.json({
 }));
 
 app.use('/api', router)
+
+if (process.env.NODE_ENV === 'production') {
+   app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
+   app.get('*', function (req, res) {
+      res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
+   });
+}
+
 app.use(errorCatcher)
 
 const start = async () => {
