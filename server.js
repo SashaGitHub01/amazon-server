@@ -33,13 +33,6 @@ app.use(bodyParser.json({
 
 app.use('/api', router)
 
-// if (process.env.NODE_ENV === 'production') {
-//    app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
-//    app.get('*', function (req, res) {
-//       res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
-//    });
-// }
-
 app.use(errorCatcher)
 
 const start = async () => {

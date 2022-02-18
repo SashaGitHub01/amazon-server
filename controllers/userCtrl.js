@@ -9,10 +9,11 @@ class UserCtrl {
    create = async (req, res, next) => {
       try {
          const errors = validationResult(req);
+         console.log(errors);
          if (!errors.isEmpty()) return next(ApiError.badReq('Invalid data', errors))
 
          const check = await User.findOne({ email: req.body.email })
-         if (check) return next(ApiError.badReq('User with this letter already exists'))
+         if (check) return next(ApiError.badReq('User with this email already exists'))
 
          const hash = await bcrypt.hash(req.body.password, 5);
 
@@ -49,7 +50,8 @@ class UserCtrl {
          if (req.user) {
             const token = jwt.sign({ user: req.user.id }, process.env.SECRET_KEY)
             res.cookie('myToken', token, {
-               maxAge: 999999999999999, secure: true,
+               maxAge: 999999999999999,
+               secure: true,
                sameSite: 'none',
                httpOnly: false,
             })
@@ -59,7 +61,7 @@ class UserCtrl {
             data: req.user
          })
       } catch (err) {
-         return next(ApiError.internal())
+         return next(ApiError.internal(err.message))
       }
    }
 

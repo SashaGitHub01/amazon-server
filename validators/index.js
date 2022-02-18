@@ -1,26 +1,26 @@
 import { body } from 'express-validator';
 
 export const reg = [
-   body('email', 'Введите email')
+   body('email', 'Enter your email')
       .isEmail()
-      .withMessage('Неверный формат email')
+      .withMessage('Invalid email')
       .isLength({ min: 5, max: 35 })
       .withMessage('Min count of characters is 5, and max count is 35'),
 
-   body('username', 'Введите email')
+   body('username', 'Enter your name')
       .isString()
-      .withMessage('Неверный формат')
-      .isLength({ min: 2, max: 35 })
-      .withMessage('Min count of characters is 5, and max count is 35'),
+      .withMessage('Invadid format')
+      .isLength({ min: 2, max: 20 })
+      .withMessage('Min count of characters is 2, and max count is 20'),
 
 
-   body('password', 'Укажите пароль')
+   body('password', 'Enter your password')
       .isString()
       .isLength({
          min: 3,
          max: 50
       })
-      .withMessage('Минимальный длина пароля - 6 символов')
+      .withMessage('Minimal count of characters in the password is 3')
 ]
 
 export const login = [
@@ -36,7 +36,7 @@ export const login = [
          min: 3,
          max: 50
       })
-      .withMessage('Минимальный длина пароля - 6 символов')
+      .withMessage('Minimal count of characters in the password is 3')
 ]
 
 export const item = [

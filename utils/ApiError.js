@@ -9,8 +9,8 @@ export class ApiError extends Error {
       this.errors = errors;
    }
 
-   static unauthorized() {
-      return new ApiError(401, 'Пользователь не авторизован')
+   static unauthorized(message = 'Пользователь не авторизован') {
+      return new ApiError(401, message)
    }
 
    static badReq(message, err) {
