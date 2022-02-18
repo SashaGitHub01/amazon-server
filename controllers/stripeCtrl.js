@@ -1,6 +1,8 @@
 import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET);
 import { ApiError } from '../utils/ApiError.js'
+import { Cart } from '../models/Cart.js';
+import { CartItem } from '../models/CartItem.js';
 import { Order } from '../models/Order.js';
 import { User } from '../models/User.js';
 
@@ -19,7 +21,9 @@ const fulfillOrder = async (session) => {
          items: items.data
       })
 
-      await User.findByIdAndUpdate(order.user, { $push: { orders: order._id } })
+      const user = await User.findByIdAndUpdate(order.user, { $push: { orders: order._id } })
+      await Cart.findByIdAndUpdate(user.cart, { items: [], totalPrice: 0, totalItems: 0 })
+      await CartItem.deleteMany({ cart: user.cart })
 
       return order;
    } catch (err) {
