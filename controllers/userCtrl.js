@@ -5,6 +5,13 @@ import { Cart } from '../models/Cart.js'
 import { User } from '../models/User.js'
 import jwt from 'jsonwebtoken';
 
+const cookieSetup = {
+   maxAge: 999999999999999,
+   sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+   httpOnly: process.env.NODE_ENV === 'production' ? false : true,
+   secure: process.env.NODE_ENV === 'production' ? true : false
+}
+
 class UserCtrl {
    create = async (req, res, next) => {
       try {
@@ -32,11 +39,7 @@ class UserCtrl {
          await user.save()
 
          const token = jwt.sign({ user: user.id }, process.env.SECRET_KEY)
-         res.cookie('myToken', token, {
-            maxAge: 999999999999999, secure: true,
-            sameSite: 'none',
-            httpOnly: false,
-         })
+         res.cookie('myToken', token, cookieSetup)
          return res.json({
             data: user
          })
@@ -49,12 +52,7 @@ class UserCtrl {
       try {
          if (req.user) {
             const token = jwt.sign({ user: req.user.id }, process.env.SECRET_KEY)
-            res.cookie('myToken', token, {
-               maxAge: 999999999999999,
-               secure: true,
-               sameSite: 'none',
-               httpOnly: false,
-            })
+            res.cookie('myToken', token, cookieSetup)
          }
 
          return res.json({
